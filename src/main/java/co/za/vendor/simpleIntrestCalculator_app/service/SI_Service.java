@@ -103,12 +103,18 @@ public class SI_Service {
         Optional<SI> optionalsi = si_repository.findById(loanId);
 
         if (optionalsi.isPresent()){
+            SI siData = optionalsi.get();
             if(result.equals("yes")) {
                 si_repository.deleteById(loanId);
                 return "the user with ID: " + loanId + " deleted successfully";
             }else{
+                double p = siData.getLoanAmount();
+                double t = siData.getTime();
+                double r = siData.getRateOfInterest();
+                double I = (p * t * r) / 100;
+                double dueAmount = p + I;
 
-                return "WITHOUT CLEARING DUES WE CANNOT PROCEED WITH FURTHER";
+                return "this is the dueAmount pending: " + dueAmount +"  WITHOUT CLEARING DUES WE CANNOT PROCEED WITH FURTHER";
             }
         }else {
             return "the user with trhe ID: " + loanId + " is no longer exist or user may cleared their dues in time.";
